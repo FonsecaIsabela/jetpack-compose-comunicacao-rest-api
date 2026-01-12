@@ -35,6 +35,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.alura.anyflix.navigation.AnyflixNavHost
+import br.com.alura.anyflix.navigation.addressFormRoute
 import br.com.alura.anyflix.navigation.homeRoute
 import br.com.alura.anyflix.navigation.movieDetailsRouteFullpath
 import br.com.alura.anyflix.navigation.myListRoute
@@ -111,6 +112,11 @@ fun AnyflixApp(
                 movieDetailsRouteFullpath -> {
                     Text("Informações")
                 }
+
+                addressFormRoute -> {
+                    Text(text = "Cadastro de endereço")
+                }
+
                 homeRoute -> {
                     Image(
                         painterResource(id = R.drawable.anyflix),

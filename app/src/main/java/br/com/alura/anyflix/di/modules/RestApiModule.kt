@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -17,7 +18,8 @@ object RestApiModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(client: OkHttpClient): Retrofit {
+    @AnyflixRetrofit
+    fun provideAnyflixRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl("http://192.168.1.104:8080/")
             .addConverterFactory(MoshiConverterFactory.create())
@@ -27,7 +29,23 @@ object RestApiModule {
 
     @Provides
     @Singleton
-    fun provideMovieService(retrofit: Retrofit): MovieService {
+    @ViacepRetrofit
+    fun provideViacepRetrofit(client: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://viacep.com.br/ws/")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .client(client)
+            .build()
+    }
+    @Provides
+    @Singleton
+    fun provideMovieService(@AnyflixRetrofit retrofit: Retrofit): MovieService {
+        return retrofit.create(MovieService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddressService(@ViacepRetrofit retrofit: Retrofit): MovieService {
         return retrofit.create(MovieService::class.java)
     }
 
@@ -50,3 +68,11 @@ object RestApiModule {
             .build()
     }
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AnyflixRetrofit
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ViacepRetrofit
